@@ -27,3 +27,6 @@ ENTRYPOINT ["dotnet", "ProjectA.dll"]
 
 
 #Vol>docker build -t projecta-image -f ProjectA/Dockerfile .
+#Vol>docker run projecta-image
+#Vol>docker ps -a
+#>docker exec -it cb072b2699d4 sh
