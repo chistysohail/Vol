@@ -24,3 +24,6 @@ FROM mcr.microsoft.com/dotnet/runtime:6.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "ProjectA.dll"]
+
+
+#Vol>docker build -t projecta-image -f ProjectA/Dockerfile .
