@@ -4,9 +4,10 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy the project files using adjusted relative paths
+# Copy the project files using paths relative to the Vol directory
 COPY Backend/ProjectA/ProjectA.csproj ProjectA/
 COPY Backend/SharedLibrary/SharedLibrary.csproj SharedLibrary/
+COPY Common/Configuration/config.json Common/Configuration/
 
 # List the files to check if they are copied correctly
 RUN ls -la /app
@@ -14,9 +15,10 @@ RUN ls -la /app
 # Restore the dependencies
 RUN dotnet restore ProjectA/ProjectA.csproj
 
-# Copy the entire source code of ProjectA and SharedLibrary
+# Copy the entire source code of ProjectA, SharedLibrary, and the Common configuration
 COPY Backend/ProjectA/. ProjectA/
 COPY Backend/SharedLibrary/. SharedLibrary/
+COPY Common/. Common/
 
 # Build the project
 RUN dotnet build ProjectA/ProjectA.csproj -c Release -o /app/build
@@ -25,7 +27,21 @@ RUN dotnet build ProjectA/ProjectA.csproj -c Release -o /app/build
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/build .
+COPY --from=build /app/Common/Configuration/config.json /app/Common/Configuration/config.json
 ENTRYPOINT ["dotnet", "ProjectA.dll"]
+
 
 #To Build from Vol 
 #Vol>docker build -t projecta-image111 -f Backend/ProjectA/Dockerfile .
+
+
+#C:\dev>docker exec -it 6a84c1f80918 sh
+## ls
+#Common    ProjectA.deps.json  ProjectA.pdb                 SharedLibrary.deps.json  SharedLibrary.pdb
+#ProjectA  ProjectA.dll        ProjectA.runtimeconfig.json  SharedLibrary.dll
+## cd Common
+## ls
+#Configuration
+## cd Configuration
+## ls
+#config.json
