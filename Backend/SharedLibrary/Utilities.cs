@@ -1,4 +1,4 @@
-﻿namespace SharedLibrary
+﻿namespace Backend.SharedLibrary
 {
     public static class Utilities
     {

@@ -4,17 +4,19 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy the solution file and the necessary project files
-COPY Vol.sln ./
-COPY SharedLibrary/SharedLibrary.csproj SharedLibrary/
-COPY ProjectA/ProjectA.csproj ProjectA/
+# Copy the project files using relative paths
+COPY ../ProjectA/ProjectA.csproj ProjectA/
+COPY ../SharedLibrary/SharedLibrary.csproj SharedLibrary/
+
+# List the files to check if they are copied correctly
+RUN ls -la /app
 
 # Restore the dependencies
 RUN dotnet restore ProjectA/ProjectA.csproj
 
 # Copy the entire source code of ProjectA and SharedLibrary
-COPY ProjectA/. ProjectA/
-COPY SharedLibrary/. SharedLibrary/
+COPY ../ProjectA/. ProjectA/
+COPY ../SharedLibrary/. SharedLibrary/
 
 # Build the project
 RUN dotnet build ProjectA/ProjectA.csproj -c Release -o /app/build
@@ -25,8 +27,5 @@ WORKDIR /app
 COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "ProjectA.dll"]
 
-
-#Vol>docker build -t projecta-image -f ProjectA/Dockerfile .
-#Vol>docker run projecta-image
-#Vol>docker ps -a
-#>docker exec -it cb072b2699d4 sh
+#Build it from this Path:
+#Vol\Backend>docker build -t projecta-image111 -f ProjectA/Dockerfile .
