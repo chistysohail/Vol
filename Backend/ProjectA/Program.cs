@@ -9,7 +9,7 @@ namespace Backend.ProjectA
     {
         public static void Main(string[] args)
         {
-            //Thread.Sleep(100000);
+            Thread.Sleep(100000);
             Console.WriteLine(Utilities.GetGreeting("ProjectA"));
             Console.WriteLine("Reading configuration...");
 
